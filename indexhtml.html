@@ -1,33 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 
-<title>Trending Entertainment Hub | Concerts, Celebrity Buzz, Movies & Viral TikTok Trends</title>
+<title>Trending Entertainment Hub | Viral News, Celebrity Buzz & Movie Releases</title>
 
-<meta name="description" content="Discover the latest concert announcements, celebrity buzz, new movie releases, and viral TikTok trends. Updated daily with the hottest entertainment stories online.">
+<meta name="description" content="Latest celebrity news, movie releases, concerts and viral TikTok trends updated automatically.">
 
-<meta name="keywords" content="concert announcements, celebrity news, movie releases, viral TikTok trends, entertainment blog">
+<meta name="robots" content="index, follow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
 
 <style>
+
 body{
-font-family: Arial, sans-serif;
+font-family:Arial;
 margin:0;
 background:#f4f4f4;
 }
 
 header{
-background:black;
+background:#000;
 color:white;
-padding:20px;
 text-align:center;
+padding:25px;
 }
 
 nav{
 background:#222;
-padding:10px;
 text-align:center;
+padding:10px;
 }
 
 nav a{
@@ -38,27 +43,65 @@ font-weight:bold;
 }
 
 .container{
-max-width:900px;
+max-width:1100px;
 margin:auto;
-background:white;
 padding:20px;
 }
 
-.article{
-margin-bottom:40px;
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:20px;
 }
 
-.article h2{
-color:#111;
+.card{
+background:white;
+border-radius:6px;
+overflow:hidden;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
 }
 
-.footer{
-background:black;
+.card img{
+width:100%;
+height:170px;
+object-fit:cover;
+}
+
+.card h3{
+padding:10px;
+margin:0;
+font-size:18px;
+}
+
+.card p{
+padding:0 10px 10px;
+font-size:14px;
+}
+
+.card a{
+display:block;
+padding:10px;
+background:#00bcd4;
 color:white;
 text-align:center;
-padding:15px;
-margin-top:40px;
+text-decoration:none;
 }
+
+.ad{
+background:#ddd;
+text-align:center;
+padding:25px;
+margin:25px 0;
+}
+
+footer{
+background:#000;
+color:white;
+text-align:center;
+padding:20px;
+margin-top:30px;
+}
+
 </style>
 
 </head>
@@ -66,81 +109,103 @@ margin-top:40px;
 <body>
 
 <header>
+
 <h1>Trending Entertainment Hub</h1>
-<p>Concerts • Celebrity Buzz • Movie Releases • Viral TikTok Trends</p>
+<p>Celebrity News • Movies • Viral Trends • Concerts</p>
+
 </header>
 
 <nav>
+
 <a href="#">Home</a>
-<a href="#">Concerts</a>
 <a href="#">Celebrities</a>
 <a href="#">Movies</a>
-<a href="#">TikTok Trends</a>
+<a href="#">TikTok</a>
+<a href="#">Concerts</a>
+
 </nav>
 
 <div class="container">
 
-<div class="article">
-<h2>🎤 Biggest Concert Announcements Fans Are Talking About</h2>
-
-<p>
-Music fans are excited as global artists begin revealing new tour dates and surprise performances.
-Major performers are expected to release tour schedules soon, and ticket demand is already rising.
-Concert announcements often become some of the most searched entertainment topics online.
-</p>
-
-<p>
-Fans typically rush to buy tickets within minutes after announcements, especially when global stars reveal new cities or exclusive shows.
-Concert news spreads rapidly across social media and search engines, making it one of the most viral entertainment topics every year.
-</p>
+<div class="ad">
+Google AdSense Ad Slot
 </div>
 
-<div class="article">
-<h2>⭐ Celebrity Buzz Dominating Social Media</h2>
-
-<p>
-Celebrity culture continues to dominate online conversations. From new relationships to surprising interviews, entertainment fans are constantly looking for updates about their favorite stars.
-</p>
-
-<p>
-Social platforms allow fans to react instantly, turning celebrity moments into global conversations within hours.
-These viral moments often drive millions of clicks to entertainment websites and trending blogs.
-</p>
-</div>
-
-<div class="article">
-<h2>🎬 New Movie Releases Creating Global Hype</h2>
-
-<p>
-Film studios are releasing trailers and teasers earlier than ever before, building excitement months ahead of premiere dates.
-Movie fans actively search for cast announcements, plot details, and behind-the-scenes stories.
-</p>
-
-<p>
-Blockbuster releases often dominate trending search results, especially when trailers go viral online.
-Entertainment websites that cover film updates early can attract massive search traffic from movie fans worldwide.
-</p>
-</div>
-
-<div class="article">
-<h2>📱 Viral TikTok Trends Taking Over the Internet</h2>
-
-<p>
-Short-form video platforms continue to shape internet culture. Viral challenges, dance trends, and comedy clips spread rapidly as users recreate and share them.
-</p>
-
-<p>
-Many trends gain millions of views within days, making them powerful drivers of social media traffic.
-Entertainment blogs that track these trends can attract visitors from across the world looking to understand what is going viral.
-</p>
+<div id="newsGrid" class="grid"></div>
 
 </div>
 
-</div>
+<footer>
 
-<div class="footer">
-<p>© 2026 Trending Entertainment Hub</p>
-</div>
+© 2026 Trending Entertainment Hub
+
+</footer>
+
+<script>
+
+/* YOUR NEWS API KEY */
+
+const apiKey="YOUR_API_KEY";
+
+/* Load trending news */
+
+async function loadNews(){
+
+const url=`https://newsapi.org/v2/top-headlines?category=entertainment&language=en&pageSize=20&apiKey=${apiKey}`;
+
+try{
+
+const res=await fetch(url);
+
+const data=await res.json();
+
+displayNews(data.articles);
+
+}
+
+catch(error){
+
+console.log("Error loading news");
+
+}
+
+}
+
+/* Display news */
+
+function displayNews(articles){
+
+const container=document.getElementById("newsGrid");
+
+container.innerHTML="";
+
+articles.forEach(article=>{
+
+const card=document.createElement("div");
+
+card.className="card";
+
+card.innerHTML=`
+
+<img src="${article.urlToImage || 'https://picsum.photos/400/200'}">
+
+<h3>${article.title}</h3>
+
+<p>${article.description || ""}</p>
+
+<a href="${article.url}" target="_blank">Read Full Story</a>
+
+`;
+
+container.appendChild(card);
+
+});
+
+}
+
+loadNews();
+
+</script>
 
 </body>
 </html>
