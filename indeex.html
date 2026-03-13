@@ -1,21 +1,11 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-
-<title>Trending Entertainment Hub | Viral News, Celebrity Buzz & Movie Releases</title>
-
-<meta name="description" content="Latest celebrity news, movie releases, concerts and viral TikTok trends updated automatically.">
-
-<meta name="robots" content="index, follow">
-
-<link rel="preconnect" href="https://fonts.googleapis.com">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Trendaura | Viral News</title>
 
 <style>
-
 body{
 font-family:Arial;
 margin:0;
@@ -23,10 +13,10 @@ background:#f4f4f4;
 }
 
 header{
-background:#000;
+background:black;
 color:white;
 text-align:center;
-padding:25px;
+padding:20px;
 }
 
 nav{
@@ -38,70 +28,97 @@ padding:10px;
 nav a{
 color:white;
 margin:10px;
+cursor:pointer;
 text-decoration:none;
 font-weight:bold;
 }
 
+.search{
+text-align:center;
+background:white;
+padding:15px;
+}
+
+.search input{
+width:60%;
+padding:10px;
+border-radius:5px;
+border:1px solid #ccc;
+}
+
 .container{
-max-width:1100px;
+display:grid;
+grid-template-columns:3fr 1fr;
+gap:20px;
+max-width:1200px;
 margin:auto;
 padding:20px;
 }
 
-.grid{
+#newsGrid{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
 gap:20px;
 }
 
-.card{
+.article{
 background:white;
-border-radius:6px;
+border-radius:8px;
 overflow:hidden;
 box-shadow:0 3px 10px rgba(0,0,0,0.1);
 }
 
-.card img{
+.article img{
 width:100%;
 height:170px;
 object-fit:cover;
 }
 
-.card h3{
-padding:10px;
-margin:0;
-font-size:18px;
+.article h3{
+margin:10px;
 }
 
-.card p{
-padding:0 10px 10px;
+.article p{
+margin:10px;
 font-size:14px;
 }
 
-.card a{
+.article a{
 display:block;
-padding:10px;
 background:#00bcd4;
 color:white;
 text-align:center;
+padding:10px;
 text-decoration:none;
 }
 
-.ad{
-background:#ddd;
-text-align:center;
-padding:25px;
-margin:25px 0;
+.sidebar{
+background:white;
+padding:15px;
+border-radius:8px;
+}
+
+.sidebar div{
+margin:8px 0;
+cursor:pointer;
 }
 
 footer{
-background:#000;
+background:black;
 color:white;
 text-align:center;
 padding:20px;
 margin-top:30px;
 }
 
+@media(max-width:900px){
+.container{
+grid-template-columns:1fr;
+}
+.search input{
+width:90%;
+}
+}
 </style>
 
 </head>
@@ -109,92 +126,63 @@ margin-top:30px;
 <body>
 
 <header>
-
-<h1>Trending Entertainment Hub</h1>
-<p>Celebrity News • Movies • Viral Trends • Concerts</p>
-
+<h1>Trendaura</h1>
+<p>Celebrity Buzz • Movies • Concerts • TikTok Trends</p>
 </header>
 
 <nav>
-
-<a href="#">Home</a>
-<a href="#">Celebrities</a>
-<a href="#">Movies</a>
-<a href="#">TikTok</a>
-<a href="#">Concerts</a>
-
+<a onclick="loadNews('general')">Home</a>
+<a onclick="loadNews('entertainment')">Celebrities</a>
+<a onclick="loadNews('entertainment')">Movies</a>
+<a onclick="loadNews('technology')">TikTok</a>
+<a onclick="loadNews('entertainment')">Concerts</a>
 </nav>
+
+<div class="search">
+<input type="text" id="searchInput" placeholder="Search news...">
+</div>
 
 <div class="container">
 
-<div class="ad">
-Google AdSense Ad Slot
-</div>
+<div id="newsGrid"></div>
 
-<div id="newsGrid" class="grid"></div>
+<div class="sidebar">
+<h3>🔥 Trending Topics</h3>
+<div onclick="searchTopic('celebrity')">Celebrity News</div>
+<div onclick="searchTopic('movie')">Movie Trailers</div>
+<div onclick="searchTopic('tiktok')">TikTok Trends</div>
+<div onclick="searchTopic('concert')">Concert Tours</div>
+<div onclick="searchTopic('viral')">Viral Stories</div>
+</div>
 
 </div>
 
 <footer>
-
-© 2026 Trending Entertainment Hub
-
+© 2026 Trendaura
 </footer>
 
 <script>
 
-/* YOUR NEWS API KEY */
+const API_KEY="89a3ba312d4b429d9740e60acb7e5b69";
 
-const apiKey="YOUR_API_KEY";
-
-/* Load trending news */
-
-async function loadNews(){
-
-const url=`https://newsapi.org/v2/top-headlines?category=entertainment&language=en&pageSize=20&apiKey=${apiKey}`;
-
-try{
-
-const res=await fetch(url);
-
-const data=await res.json();
-
-displayNews(data.articles);
-
-}
-
-catch(error){
-
-console.log("Error loading news");
-
-}
-
-}
-
-/* Display news */
+let page=1;
+let currentCategory="general";
 
 function displayNews(articles){
 
 const container=document.getElementById("newsGrid");
 
-container.innerHTML="";
-
 articles.forEach(article=>{
 
 const card=document.createElement("div");
 
-card.className="card";
+card.className="article";
 
 card.innerHTML=`
-
 <img src="${article.urlToImage || 'https://picsum.photos/400/200'}">
-
 <h3>${article.title}</h3>
-
 <p>${article.description || ""}</p>
-
-<a href="${article.url}" target="_blank">Read Full Story</a>
-
+<a href="${article.url}" target="_blank">Read Full Article</a>
 `;
 
 container.appendChild(card);
@@ -203,7 +191,72 @@ container.appendChild(card);
 
 }
 
-loadNews();
+async function loadNews(category){
+
+page=1;
+currentCategory=category;
+
+document.getElementById("newsGrid").innerHTML="";
+
+const url=\`https://newsapi.org/v2/top-headlines?category=\${category}&language=en&pageSize=12&page=\${page}&apiKey=\${API_KEY}\`;
+
+const res=await fetch(url);
+const data=await res.json();
+
+displayNews(data.articles);
+
+}
+
+async function loadMore(){
+
+page++;
+
+const url=\`https://newsapi.org/v2/top-headlines?category=\${currentCategory}&language=en&pageSize=12&page=\${page}&apiKey=\${API_KEY}\`;
+
+const res=await fetch(url);
+const data=await res.json();
+
+displayNews(data.articles);
+
+}
+
+function searchTopic(keyword){
+document.getElementById("searchInput").value=keyword;
+searchNews();
+}
+
+async function searchNews(){
+
+const query=document.getElementById("searchInput").value;
+
+const url=\`https://newsapi.org/v2/everything?q=\${query}&language=en&pageSize=12&apiKey=\${API_KEY}\`;
+
+const res=await fetch(url);
+const data=await res.json();
+
+document.getElementById("newsGrid").innerHTML="";
+
+displayNews(data.articles);
+
+}
+
+document.getElementById("searchInput").addEventListener("keyup",function(e){
+
+if(e.key==="Enter"){
+searchNews();
+}
+
+});
+
+window.addEventListener("scroll",()=>{
+
+if(window.innerHeight+window.scrollY>=document.body.offsetHeight-200){
+loadMore();
+}
+
+});
+
+loadNews("general");
 
 </script>
 
