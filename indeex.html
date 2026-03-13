@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Trending Entertainment Hub | Viral News, Celebrity Buzz & Movie Releases</title>
+
+<meta name="description" content="Latest celebrity news, movie releases, concerts and viral TikTok trends updated automatically.">
+
+<meta name="robots" content="index, follow">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+
+<style>
+
+body{
+font-family:Arial;
+margin:0;
+background:#f4f4f4;
+}
+
+header{
+background:#000;
+color:white;
+text-align:center;
+padding:25px;
+}
+
+nav{
+background:#222;
+text-align:center;
+padding:10px;
+}
+
+nav a{
+color:white;
+margin:10px;
+text-decoration:none;
+font-weight:bold;
+}
+
+.container{
+max-width:1100px;
+margin:auto;
+padding:20px;
+}
+
+.grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:20px;
+}
+
+.card{
+background:white;
+border-radius:6px;
+overflow:hidden;
+box-shadow:0 3px 10px rgba(0,0,0,0.1);
+}
+
+.card img{
+width:100%;
+height:170px;
+object-fit:cover;
+}
+
+.card h3{
+padding:10px;
+margin:0;
+font-size:18px;
+}
+
+.card p{
+padding:0 10px 10px;
+font-size:14px;
+}
+
+.card a{
+display:block;
+padding:10px;
+background:#00bcd4;
+color:white;
+text-align:center;
+text-decoration:none;
+}
+
+.ad{
+background:#ddd;
+text-align:center;
+padding:25px;
+margin:25px 0;
+}
+
+footer{
+background:#000;
+color:white;
+text-align:center;
+padding:20px;
+margin-top:30px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+<h1>Trending Entertainment Hub</h1>
+<p>Celebrity News • Movies • Viral Trends • Concerts</p>
+
+</header>
+
+<nav>
+
+<a href="#">Home</a>
+<a href="#">Celebrities</a>
+<a href="#">Movies</a>
+<a href="#">TikTok</a>
+<a href="#">Concerts</a>
+
+</nav>
+
+<div class="container">
+
+<div class="ad">
+Google AdSense Ad Slot
+</div>
+
+<div id="newsGrid" class="grid"></div>
+
+</div>
+
+<footer>
+
+© 2026 Trending Entertainment Hub
+
+</footer>
+
+<script>
+
+/* YOUR NEWS API KEY */
+
+const apiKey="YOUR_API_KEY";
+
+/* Load trending news */
+
+async function loadNews(){
+
+const url=`https://newsapi.org/v2/top-headlines?category=entertainment&language=en&pageSize=20&apiKey=${apiKey}`;
+
+try{
+
+const res=await fetch(url);
+
+const data=await res.json();
+
+displayNews(data.articles);
+
+}
+
+catch(error){
+
+console.log("Error loading news");
+
+}
+
+}
+
+/* Display news */
+
+function displayNews(articles){
+
+const container=document.getElementById("newsGrid");
+
+container.innerHTML="";
+
+articles.forEach(article=>{
+
+const card=document.createElement("div");
+
+card.className="card";
+
+card.innerHTML=`
+
+<img src="${article.urlToImage || 'https://picsum.photos/400/200'}">
+
+<h3>${article.title}</h3>
+
+<p>${article.description || ""}</p>
+
+<a href="${article.url}" target="_blank">Read Full Story</a>
+
+`;
+
+container.appendChild(card);
+
+});
+
+}
+
+loadNews();
+
+</script>
+
+</body>
+</html>
